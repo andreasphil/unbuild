@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png" />
+    <link rel="icon" href="./assets/favicon.ico" sizes="any" />
+    <title>Preact App</title>
+
+    <!-- External dependencies -->
+    <script type="importmap">
+      {
+        "imports": {
+          "fine": "https://cdn.jsdelivr.net/gh/andreasphil/fine@v0.0.1-alpha.12/dist/index.min.css",
+          "htm": "https://unpkg.com/htm@3.1.0?module",
+          "preact": "https://unpkg.com/preact@10.6.6?module",
+          "preact/hooks": "https://unpkg.com/preact@10.6.6/hooks/dist/hooks.module.js"
+        }
+      }
+    </script>
+
+    <!-- ES module shims and other polyfills so we can use modern browser
+    features that aren't yet widely available, like import maps. Learn more about
+    configuration: https://github.com/guybedford/es-module-shims#init-options -->
+    <script>
+      window.esmsInitOptions = { polyfillEnable: ["css-modules", "json-modules"] };
+    </script>
+    <script async src="https://unpkg.com/construct-style-sheets-polyfill@3.1.0"></script>
+    <script async src="https://unpkg.com/es-module-shims@1.5.2"></script>
+
+    <!-- App scripts -->
+    <script async type="module" src="./app.js"></script>
+  </head>
+
+  <body></body>
+</html>
