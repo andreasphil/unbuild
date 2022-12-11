@@ -19,8 +19,8 @@ const App = () => {
   }, 0);
 
   return html`
-    <div f-container style="text-align: center">
-      <h1 style="font-size: var(--small-font-size); color: var(--c-primary)">
+    <div data-container style="text-align: center">
+      <h1 style="font-size: var(--font-size-small); color: var(--c-primary)">
         HELLO, WORLD! 🎉
       </h1>
       <strong style="margin: 3rem 0; font-size: 6rem; display: block">
@@ -28,7 +28,11 @@ const App = () => {
       </strong>
 
       <div style="display: flex; gap: 1rem">
-        <button role="button" f-outline onClick=${() => dispatch("decrement")}>
+        <button
+          role="button"
+          data-variant="outline"
+          onClick=${() => dispatch("decrement")}
+        >
           -1
         </button>
         <button role="button" onClick=${() => dispatch("increment")}>+1</button>

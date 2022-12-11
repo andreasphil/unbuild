@@ -11,10 +11,11 @@
     <script type="importmap">
       {
         "imports": {
-          "fine": "https://cdn.jsdelivr.net/gh/andreasphil/fine@v0.0.1-alpha.12/dist/index.min.css",
-          "htm": "https://unpkg.com/htm@3.1.0?module",
-          "preact": "https://unpkg.com/preact@10.6.6?module",
-          "preact/hooks": "https://unpkg.com/preact@10.6.6/hooks/dist/hooks.module.js"
+          "@preact/signals": "https://unpkg.com/@preact/signals@1.1.2?module",
+          "fine": "https://cdn.jsdelivr.net/gh/andreasphil/fine@v0.6.0/dist/index.min.css",
+          "htm": "https://unpkg.com/htm@3.1.1?module",
+          "preact": "https://unpkg.com/preact@10.11.3?module",
+          "preact/hooks": "https://unpkg.com/preact@10.11.3/hooks/dist/hooks.module.js"
         }
       }
     </script>
@@ -26,7 +27,7 @@
       window.esmsInitOptions = { polyfillEnable: ["css-modules", "json-modules"] };
     </script>
     <script async src="https://unpkg.com/construct-style-sheets-polyfill@3.1.0"></script>
-    <script async src="https://unpkg.com/es-module-shims@1.5.2"></script>
+    <script async src="https://unpkg.com/es-module-shims@1.6.2"></script>
 
     <!-- App scripts -->
     <script async type="module" src="./app.js"></script>
