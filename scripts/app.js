@@ -1,11 +1,6 @@
-import fine from "fine" assert { type: "css" };
+import { html } from "unbuild";
 import { render } from "preact";
 import { useReducer } from "preact/hooks";
-import { html } from "./lib.js";
-import styles from "./styles/styles.css" assert { type: "css" };
-
-// Apply styles
-document.adoptedStyleSheets = [fine, styles];
 
 const App = () => {
   const [count, dispatch] = useReducer((state, action) => {
@@ -29,13 +24,20 @@ const App = () => {
 
       <div style="display: flex; gap: 1rem">
         <button
+          style="flex: 1"
           role="button"
           data-variant="outline"
           onClick=${() => dispatch("decrement")}
         >
           -1
         </button>
-        <button role="button" onClick=${() => dispatch("increment")}>+1</button>
+        <button
+          style="flex: 1"
+          role="button"
+          onClick=${() => dispatch("increment")}
+        >
+          +1
+        </button>
       </div>
     </div>
   `;
