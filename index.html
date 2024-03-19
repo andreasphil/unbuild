@@ -5,17 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png" />
     <link rel="icon" href="./assets/favicon.ico" sizes="any" />
-    <title>Preact App</title>
+    <title>Vue App</title>
 
     <!-- Styles -->
     <link rel="stylesheet" href="./styles/styles.css" />
 
-    <!-- External dependencies -->
-    <script type="importmap" src="./import-map.json"></script>
+    <!-- External dependencies and aliases -->
+    <script type="importmap">
+      {
+        "imports": {
+          "$/": "./scripts/",
+          "vue": "https://esm.sh/vue@3/dist/vue.esm-browser.js",
+          "@andreasphil/design-system/": "https://cdn.jsdelivr.net/gh/andreasphil/design-system@v0.25.0/"
+        }
+      }
+    </script>
 
     <!-- App scripts -->
     <script async type="module" src="./scripts/app.js"></script>
   </head>
 
-  <body></body>
+  <body>
+    <div id="app"></div>
+  </body>
 </html>
