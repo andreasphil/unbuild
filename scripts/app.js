@@ -1,4 +1,4 @@
-import { useThemeColor } from "@andreasphil/design-system/scripts/utils.js";
+import { useThemeColor } from "@andreasphil/design-system";
 import { createApp, defineComponent, onMounted, ref } from "vue";
 
 const App = defineComponent({

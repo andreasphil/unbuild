@@ -14,9 +14,9 @@
     <script type="importmap">
       {
         "imports": {
-          "$/": "./scripts/",
-          "vue": "https://esm.sh/vue@3/dist/vue.esm-browser.js",
-          "@andreasphil/design-system/": "https://cdn.jsdelivr.net/gh/andreasphil/design-system@v0.25.0/"
+          "@/": "./scripts/",
+          "@andreasphil/design-system": "https://esm.sh/gh/andreasphil/design-system@v0.29.0",
+          "vue": "https://esm.sh/vue@3.4.21/dist/vue.esm-browser.js"
         }
       }
     </script>
@@ -26,6 +26,13 @@
   </head>
 
   <body>
-    <div id="app"></div>
+    <div data-with-fallback>
+      <div id="app"></div>
+
+      <!-- Show a loading state while the app is starting -->
+      <div data-when="empty">
+        <p aria-busy="true"><small>Loading ...</small></p>
+      </div>
+    </div>
   </body>
 </html>

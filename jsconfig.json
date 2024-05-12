@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "checkJs": true,
-    "paths": { "@/*": ["./src/*"] },
+    "paths": { "@/*": ["./scripts/*"] },
     "target": "es2022",
     "moduleResolution": "bundler",
     "module": "ES2022"
