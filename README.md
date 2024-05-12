@@ -38,6 +38,7 @@ npx servor --browse --reload
 - `scripts/`: For application scripts. `app.js` is imported by `index.html` and should serve as the entrypoint for the application.
 - `styles/`: For stylesheets. `styles.css` is imported by `index.html` and should serve as the entrypoint for the application.
 - `index.html`: Entrypoint to the SPA. Use the [import map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules#importing_modules_using_import_maps) for declaring external dependencies and aliases.
+- `jsconfig.json`: Enables some minimal editor support such as aliases and automatic type checking.
 - `LICENSE.md` and `README.md`: Replace these with your stuff.
 
 ## Development workflow
