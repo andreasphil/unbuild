@@ -45,13 +45,12 @@ npx servor --browse --reload
 
 - **Editor:** I recommend [Visual Studio Code](https://code.visualstudio.com), because it has features such as linting and formatting included out of the box. The [es6-string-html](https://marketplace.visualstudio.com/items?itemName=Tobermory.es6-string-html) extension additionally provides highlighting for templates. I also prefer the [prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extension to the default formatter.
 
-- **Dependencies:** The most convenient way to use external dependencies is to link them in the import map in `index.html` from a CDN such as [unpkg](https://unpkg.com), [jsDelivr](https://www.jsdelivr.com), or [esm.sh](https://esm.sh). All of them should give you access to almost any NPM module.
-
-  - jsDeliver also allows you to hotlink files from GitHub repositories. Just make sure to link the ESM version.
-  - [JSPM](https://generator.jspm.io) has a convenient import map generator that's worth a try.
+- **Dependencies:** The most convenient way to use external dependencies is to link them in the import map in `index.html` from a CDN such as [esm.sh](https://esm.sh). This gives you access to virtually any NPM module as well as code hosted on GitHub.
 
 - **Aliases:** You can simplify local imports by mapping certain paths to aliases in the import map. Unbuild comes pre-configured with `./scripts/` aliased to `$/`.
 
-- **Type checking:** `// @ts-check` in combination with JSDoc comments can do basic type checking. To learn more: [TypeScript, Minus TypeScript on CSS-Tricks](https://css-tricks.com/typescript-minus-typescript/)
+- **Type checking:** `// @ts-check` or a [`jsconfig.json`](./jsconfig.json) in combination with JSDoc comments can do basic type checking. To learn more: [TypeScript, Minus TypeScript on CSS-Tricks](https://css-tricks.com/typescript-minus-typescript/).
 
 - **Deployment:** No `node_modules` or build process means you can literally just drop your project folder on any static file server that has an IP, and your app is ready. I like [Netlify Drop](http://app.netlify.com/drop).
+
+- **Testting:** If you want to add unit tests, you can use [Node's](https://nodejs.org/api/test.html) or [Deno's](https://docs.deno.com/runtime/manual/basics/testing/) built-in test runners for lightweight testing that doesn't require any additional setup or dependencies (beyond Node or Deno itself).
