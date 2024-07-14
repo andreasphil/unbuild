@@ -12,7 +12,7 @@ const App = defineComponent({
     return { name };
   },
 
-  template: `<h1>Hello {{ name }}!</h1>`,
+  template: /* html */ `<h1>Hello {{ name }}!</h1>`,
 });
 
 createApp(App).mount("#app");
