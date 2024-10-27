@@ -1,5 +1,6 @@
 import { useThemeColor } from "@andreasphil/design-system";
 import { createApp, defineComponent, onMounted, ref } from "vue";
+import { html } from "@/lib.js";
 
 const App = defineComponent({
   setup() {
@@ -12,7 +13,7 @@ const App = defineComponent({
     return { name };
   },
 
-  template: /* html */ `<h1>Hello {{ name }}!</h1>`,
+  template: html`<h1>Hello {{ name }}!</h1>`,
 });
 
 createApp(App).mount("#app");
