@@ -45,11 +45,11 @@ npx servor --browse --reload
 
 ## Development
 
-- **Editor:** I recommend [Visual Studio Code](https://code.visualstudio.com), because it has features such as linting and formatting included out of the box. The [es6-string-html](https://marketplace.visualstudio.com/items?itemName=Tobermory.es6-string-html) extension additionally provides highlighting for templates. I also prefer the [prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extension to the default formatter.
+- **Editor:** I recommend [Visual Studio Code](https://code.visualstudio.com), because it has features such as linting and formatting included out of the box. If you use the `html` helper from [lib.js](./scripts/lib.js), VS Code provides highlighting for templates. I also prefer the [prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extension to the default formatter.
 
 - **Dependencies:** The most convenient way to use external dependencies is to link them in the import map in `index.html` from a CDN such as [esm.sh](https://esm.sh). This gives you access to virtually any NPM module as well as code hosted on GitHub.
 
-- **Aliases:** You can simplify local imports by mapping certain paths to aliases in the import map. Unbuild comes pre-configured with `./scripts/` aliased to `$/`.
+- **Aliases:** You can simplify local imports by mapping certain paths to aliases in the import map. Unbuild comes pre-configured with `./scripts/` aliased to `@/`.
 
 - **Type checking:** `// @ts-check` or a [`jsconfig.json`](./jsconfig.json) in combination with JSDoc comments can do basic type checking. To learn more: [TypeScript, Minus TypeScript on CSS-Tricks](https://css-tricks.com/typescript-minus-typescript/).
 
