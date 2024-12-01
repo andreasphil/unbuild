@@ -1,9 +1,13 @@
 {
   "compilerOptions": {
     "checkJs": true,
-    "paths": { "@/*": ["./scripts/*"] },
     "target": "es2023",
     "moduleResolution": "bundler",
-    "module": "es2022"
+    "module": "es2022",
+
+    "paths": {
+      "@/*": ["./scripts/*"],
+      "@vendor/*": ["./vendor/*"]
+    }
   }
 }

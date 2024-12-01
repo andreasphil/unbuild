@@ -39,6 +39,7 @@ npx servor --browse --reload
 | `assets/`                    | This is where you should keep your static assets such as favicons, images, and the like.                                                                                                                |
 | `scripts/`                   | For application scripts. `app.js` is imported by `index.html` and should serve as the entrypoint for the application.                                                                                   |
 | `styles/`                    | For stylesheets. `styles.css` is imported by `index.html` and should serve as the entrypoint for the application.                                                                                       |
+| `vendor/`                    | If you want to keep dependencies locally rather than serving them from a CDN, put them here.                                                                                                            |
 | `index.html`                 | Entrypoint to the SPA. Use the [import map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules#importing_modules_using_import_maps) for declaring external dependencies and aliases. |
 | `jsconfig.json`              | Enables some minimal editor support such as aliases and automatic type checking.                                                                                                                        |
 | `LICENSE.md` and `README.md` | Replace these with your stuff.                                                                                                                                                                          |
@@ -49,7 +50,7 @@ npx servor --browse --reload
 
 - **Dependencies:** The most convenient way to use external dependencies is to link them in the import map in `index.html` from a CDN such as [esm.sh](https://esm.sh). This gives you access to virtually any NPM module as well as code hosted on GitHub.
 
-- **Aliases:** You can simplify local imports by mapping certain paths to aliases in the import map. Unbuild comes pre-configured with `./scripts/` aliased to `@/`.
+- **Aliases:** You can simplify local imports by mapping certain paths to aliases in the import map. Unbuild comes pre-configured with `./scripts/` aliased to `@/` and `./vendor/` aliased to `@vendor/`.
 
 - **Type checking:** `// @ts-check` or a [`jsconfig.json`](./jsconfig.json) in combination with JSDoc comments can do basic type checking. To learn more: [TypeScript, Minus TypeScript on CSS-Tricks](https://css-tricks.com/typescript-minus-typescript/).
 
