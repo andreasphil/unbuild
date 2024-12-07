@@ -1,2 +1,2 @@
-@import url("https://esm.sh/gh/andreasphil/design-system@v0.36.0/dist/index.min.css")
+@import url("../vendor/andreasphil/design-system@v0.39.0/dist/index.min.css")
 layer(theme);

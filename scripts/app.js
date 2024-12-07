@@ -1,6 +1,11 @@
-import { useThemeColor } from "@andreasphil/design-system";
-import { createApp, defineComponent, onMounted, ref } from "vue";
 import { html } from "@/lib.js";
+import { useThemeColor } from "@vendor/andreasphil/design-system@v0.39.0/scripts/utils.js";
+import {
+  createApp,
+  defineComponent,
+  onMounted,
+  ref,
+} from "@vendor/vue@3.5.13/dist/vue.esm-browser.prod.js";
 
 const App = defineComponent({
   setup() {

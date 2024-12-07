@@ -4,10 +4,6 @@
     "target": "es2023",
     "moduleResolution": "bundler",
     "module": "es2022",
-
-    "paths": {
-      "@/*": ["./scripts/*"],
-      "@vendor/*": ["./vendor/*"]
-    }
+    "paths": { "@/*": ["./scripts/*"], "@vendor/*": ["./vendor/*"] }
   }
 }
