@@ -59,7 +59,7 @@ Luckily there are a few tricks we can use to improve this experience:
 
 - **Editor:** I recommend [Visual Studio Code](https://code.visualstudio.com), because it has features such as linting and formatting included out of the box. If you use the `html` helper from [lib.js](./scripts/lib.js), VS Code provides highlighting for templates. I also prefer the [prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extension to the default formatter.
 
-- **Dependencies:** The most convenient way to use external dependencies is to link them in the import map in `index.html` from a CDN such as [esm.sh](https://esm.sh). This gives you access to virtually any NPM module as well as code hosted on GitHub. Alternatively, [Minipack](https://github.com/andreasphil/minipack) is a small (experimental!) tool you can use to vendor dependencies.
+- **Dependencies:** The most convenient way to use external dependencies is to link them in the import map in `index.html` from a CDN such as [esm.sh](https://esm.sh). This gives you access to virtually any npm module as well as code hosted on GitHub. Alternatively, [Minipack](https://github.com/andreasphil/minipack) is a small (experimental!) tool you can use to vendor dependencies.
 
 - **Aliases:** You can simplify local imports by mapping certain paths to aliases in the import map. Unbuild comes pre-configured with `./scripts/` aliased to `@/` and `./vendor/` aliased to `@vendor/`.
 
