@@ -10,7 +10,7 @@ Unbuild lets you enjoy many of the conveniences of modern SPA development with (
 
 Optimized for prototyping and small side projects where simplicity and ease of development are important to keep them fun, and the problems solved by complex toolchains—automated testing, enforcing code style, highly optimized production code, etc.—aren't as big of a concern.
 
-- ⚛️ [Vue](https://vuejs.org) support with templates and composition API
+- ✌️ [Vue](https://vuejs.org) support with templates and composition API
 - 🚀 Works with any static file server, no `npm` or build process required
 - 📦 Import external ESM and CSS dependencies from CDNs via [Import Maps](https://github.com/WICG/import-maps)
 - 🌍 Use The Platform™ - relies on established or polyfillable standards
@@ -46,13 +46,14 @@ npx servor --browse --reload
 
 ## Development
 
-Unbuild's philosophy is that it should be possible to take the contents of this folder, serve it with any static file server, and it just works.
+Unbuild aims to make the contents of this folder easily served by any static file server without additional configuration.
 
-That means: the project files themselves rely only things that natively work in any web browser—no bundling, transpiling, non-standard file formats, language extensions, etc.
+This means:
 
-It does not mean not using any support at all, but rather decupling the support from the project itself such that it makes development more convenient. But it is never required to run, maintain, or change the project.
+- Project files use only features natively supported by modern web browsers—no bundling, transpiling, non-standard file formats, or language extensions.
+- While support tools can be used to enhance development, they are not required to run, maintain, or modify the project.
 
-Most development workflows aren't really designed for this approach. They typically assume some kind of Node.js environment and often also TypeScript. Importing your dependencies from a CDN, for example, and linking them via import maps in `index.html`, works perfectly fine for the browser. But will give you a bunch of errors and missing autocompletions in VS Code.
+Most "modern" web development workflows aren't designed for this approach, often assuming a Node.js environment and TypeScript. For example, importing dependencies from a CDN and linking them via import maps in `index.html` works perfectly fine in the browser, but may cause errors and missing autocompletions in VS Code.
 
 Luckily there are a few tricks we can use to improve this experience:
 
