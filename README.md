@@ -63,13 +63,13 @@ Luckily there are a few tricks we can use to improve this experience:
 
 - **Aliases:** You can simplify local imports by mapping certain paths to aliases in the import map. Unbuild comes pre-configured with `./scripts/` aliased to `@/` and `./vendor/` aliased to `@vendor/`.
 
-- **Autocompletions:** VS Code and Node.js-based language tools don't support autocompletions based on import maps and URL imports. But Deno implements many web standards, and therefore handles frontend projects pretty well. If you create a `deno.json` with the exact same [imports](https://docs.deno.com/runtime/fundamentals/configuration/#dependencies) as in `index.html`, you should get decent autocompletions even for dependencies from CDNs. Note that this requires the Deno extension for VS Code.
+- **Autocompletions:** VS Code and Node.js-based language tools don't support autocompletions based on import maps and URL imports. If you vendor your dependencies, your editor should be able to make sense of them and provide completions.
 
 - **Type checking:** `// @ts-check` or a [`jsconfig.json`](./jsconfig.json) in combination with JSDoc comments can do basic type checking. To learn more: [TypeScript, Minus TypeScript on CSS-Tricks](https://css-tricks.com/typescript-minus-typescript/).
 
 - **Deployment:** No `node_modules` or build process means you can literally just drop your project folder on any static file server that has an IP, and your app is ready.
 
-- **Testing:** If you want to add unit tests, you can use [Node.js's](https://nodejs.org/api/test.html) or [Deno's](https://docs.deno.com/runtime/manual/basics/testing/) built-in test runners for lightweight testing that doesn't require any additional setup or dependencies (beyond Node.js or Deno itself).
+- **Testing:** If you want to add unit tests, you can use [Node.js's](https://nodejs.org/api/test.html) built-in test runners for lightweight testing that doesn't require any additional setup or dependencies (beyond Node.js).
 
 ## Deployment
 
