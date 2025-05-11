@@ -1,5 +1,5 @@
 import { html } from "@/lib.js";
-import { useThemeColor } from "@vendor/andreasphil/design-system@v0.43.0/scripts/utils.js";
+import { useThemeColor } from "@vendor/andreasphil/design-system@v0.45.0/scripts/utils.js";
 import {
   createApp,
   defineComponent,
