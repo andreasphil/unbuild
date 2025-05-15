@@ -1,0 +1,193 @@
+#!/bin/bash
+
+# Strict mode ---------------------------------------------
+
+set -u            # no unset variables
+set -e            # exit immediately on error
+set -E            # inherit -e in functions
+set -o pipefail   # return value of pipeline is rightmost return
+IFS=$'\n\t'       # only allow tab and newline as separators
+
+# Utilities -----------------------------------------------
+
+# Log an error message and exit the script.
+#
+# Usage:
+#   _fatal <message>
+_fatal() {
+  _log error "$@"
+  exit 1
+}
+
+# Log a message with the specified level. Allowed levels are "none", "debug",
+# "info", "warn", and "error".
+#
+# Usage:
+#   _log <level> <message>
+_log() {
+  level="$1"
+  shift
+
+  gum log --level="$level" "$@"
+}
+
+# Exit if the specified command does not exist.
+#
+# Usage:
+#   _require <command>
+_require() {
+  if ! type "$1" &>/dev/null; then
+    printf "\033[0;31m\033[1mERROR\033[0m required dependency %s is missing\n" $1
+    exit 1
+  fi
+}
+
+# Global configuration ------------------------------------
+
+should_reload=false
+vendor_dir="vendor"
+
+# Internal ------------------------------------------------
+
+_temp_dir() {
+  echo "${vendor_dir}/.temp"
+}
+
+_prepare() {
+  if [[ -d "$vendor_dir" && "$should_reload" == "true" ]]; then
+    _log warn "reloading all dependencies"
+    rm -r "$vendor_dir"
+  fi
+}
+
+_cleanup() {
+  if [[ -e "$(_temp_dir)" ]]; then
+    rm -r "$(_temp_dir)"
+  fi
+}
+
+trap _cleanup EXIT
+
+# Download the tarball from the specified URL to a temporary directory,
+# unpack it, and copy all files to the output folder. If a glob pattern
+# is provided, only files matching that pattern will be copied.
+#
+# Usage:
+#   _download_and_unpack <identifier> <url> [keep_glob]
+_download_and_unpack() {
+  local identifier="$1"
+  local url="$2"
+  local keep_glob="$3"
+
+  if [[ -d "$vendor_dir/$identifier" ]]; then
+    _log info "skipping $identifier as it already exists"
+    return 0
+  fi
+
+  local temp
+  temp="$(_temp_dir)/$identifier"
+  mkdir -p "$temp"
+
+  if ! http -d "$url" --print "" --output "$temp.tar.gz"; then
+    _log error "failed to download" url="$url"
+    return 1
+  fi
+
+  tar -xf "$temp.tar.gz" -C "$temp" --strip-components=1
+
+  cd "$(_temp_dir)" &>/dev/null
+  fd --glob "$keep_glob" --full-path "$identifier" -x rsync -R {} ".."
+  cd - &>/dev/null
+
+  _log info "successfully loaded $identifier!"
+}
+
+# Public --------------------------------------------------
+
+# Downloads the package from NPM and unpacks it. The package identifier
+# can be anything that can be `npm install`-ed. If a glob pattern is specified,
+# only the files matching that pattern are kept.
+#
+# Usage:
+#   get_from_npm <package> [glob]
+get_from_npm() {
+  _log info "get from npm" options="$*"
+
+  local query="$1"
+  local glob="**/*"; if [[ $# -eq 2 ]]; then glob="$2"; fi
+
+  local npminfo
+  npminfo="$(npm info "$query" --json name version dist.tarball)"
+
+  local output
+  output="$(echo "$npminfo" | jq "if type==\"array\" then .[-1] else . end")"
+
+  local name
+  name="$(echo "$output" | jq -r ".name" )"
+
+  local version
+  version="$(echo "$output" | jq -r ".version")"
+
+  local url
+  url="$(echo "$output" | jq -r '.["dist.tarball"]')"
+
+  _log info "resolved npm package" name="$name" version="$version"
+  _download_and_unpack "$name@$version" "$url" "$glob"
+}
+
+# Downloads the archive from GitHub and unpacks it. If a glob pattern is
+# specified, only the files matching that pattern are kept.
+#
+# Usage:
+#   get_from_github <username/repo> <tag> [glob]
+get_from_github() {
+  _log info "get from GitHub" options="$*"
+
+  local name="$1"
+  local version="$2"
+  local glob="**/*"; if [[ $# -eq 3 ]]; then glob="$3"; fi
+
+  local url="https://github.com/$name/archive/refs/tags/$version.tar.gz"
+
+  _log info "resolved download URL" url="$url"
+  _download_and_unpack "$name@$version" "$url" "$glob"
+}
+
+# Downloads the tarball and unpacks it. The identifier is used for determining
+# the output directory. If a glob pattern is specified, only the files matching
+# that pattern are kept.
+#
+# Usage:
+#   get_tar <identifier> <url> [glob]
+get_tar() {
+  local identifier="$1"
+  local url="$2"
+  local glob="**/*"; if [[ $# -eq 2 ]]; then glob="$2"; fi
+
+  _log info "get tarball from URL" url="$url"
+  _download_and_unpack "$identifier" "$url" "$glob"
+}
+
+# Init ----------------------------------------------------
+
+_require "fd"
+_require "gum"
+_require "http"
+_require "jq"
+
+while [[ $# -gt 0 && "$1" =~ ^- && "$1" != "--" ]]; do
+  case "$1" in
+    -r | --reload)
+      should_reload=true
+      ;;
+    -o | --out)
+      shift
+      vendor_dir=${1:-vendor}
+      ;;
+    *)
+      _log warn "unknown option" option="$1"
+    esac
+  shift
+done
+
+_prepare

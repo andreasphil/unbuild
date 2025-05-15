@@ -1,0 +1,6 @@
+#!/bin/bash
+
+source pack
+
+get_from_npm vue@latest "**/{*LICENSE*,dist/vue.esm-browser.js,dist/vue.esm-browser.prod.js}"
+get_from_github andreasphil/design-system v0.43.0 "**/{*LICENSE*,dist/*,scripts/*}"
