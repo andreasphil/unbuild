@@ -5,7 +5,7 @@ import {
   defineComponent,
   onMounted,
   ref,
-} from "@vendor/vue@3.5.13/dist/vue.esm-browser.prod.js";
+} from "@vendor/vue@3.5.14/dist/vue.esm-browser.prod.js";
 
 const App = defineComponent({
   setup() {
