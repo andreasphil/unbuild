@@ -29,7 +29,7 @@ brew install fd gum httpie jq
 You can use the [install script](./install) to initialize an auto-updating version of Minipack in the current working directory:
 
 ```sh
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/andreasphil/minipack/refs/heads/main/install)"
+/bin/bash -c "$(curl -fsSL https://github.com/andreasphil/minipack/raw/refs/heads/main/install)"
 ```
 
 Alternatively, you can clone Minipack from GitHub:

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -25,11 +25,11 @@
   </head>
 
   <body>
-    <div data-with-fallback>
+    <div has-fallback>
       <div id="app"></div>
 
       <!-- Show a loading state while the app is starting -->
-      <div data-when="empty">
+      <div fallback-for="empty">
         <p aria-busy="true"><small>Loading ...</small></p>
       </div>
     </div>

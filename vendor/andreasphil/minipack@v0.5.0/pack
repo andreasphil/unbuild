@@ -96,7 +96,7 @@ _download_and_unpack() {
   tar -xf "$temp.tar.gz" -C "$temp" --strip-components=1
 
   cd "$(_temp_dir)" &>/dev/null
-  fd --glob "$keep_glob" --full-path "$identifier" -x rsync -R {} ".."
+  fd --glob "$keep_glob" --full-path "$identifier" -x rsync -rR {} ".."
   cd - &>/dev/null
 
   _log info "successfully loaded $identifier!"

@@ -1,8 +1,8 @@
 #!/bin/bash
 
-source vendor/andreasphil/minipack@v0.4.0/pack
+source vendor/andreasphil/minipack@v0.5.0/pack
 
 # Add your dependencies here
-get_from_github andreasphil/minipack v0.4.0
-get_from_github andreasphil/design-system v0.45.0 "**/{*LICENSE*,dist/*,scripts/*}"
+get_from_github andreasphil/minipack v0.5.0
+get_from_github andreasphil/design-system v0.52.0 "**/{*LICENSE*,dist/*,scripts/*}"
 get_from_npm vue@latest "**/{*LICENSE*,dist/vue.esm-browser.js,dist/vue.esm-browser.prod.js}"
