@@ -1,5 +1,5 @@
 /**
-* vue v3.5.14
+* vue v3.5.17
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
 * @license MIT
 **/
@@ -126,7 +126,7 @@ const PatchFlagNames = {
   [512]: `NEED_PATCH`,
   [1024]: `DYNAMIC_SLOTS`,
   [2048]: `DEV_ROOT_FRAGMENT`,
-  [-1]: `HOISTED`,
+  [-1]: `CACHED`,
   [-2]: `BAIL`
 };
 
@@ -857,6 +857,7 @@ class Link {
   }
 }
 class Dep {
+  // TODO isolatedDeclarations "__v_skip"
   constructor(computed) {
     this.computed = computed;
     this.version = 0;
@@ -877,6 +878,10 @@ class Dep {
      * Subscriber counter
      */
     this.sc = 0;
+    /**
+     * @internal
+     */
+    this.__v_skip = true;
     {
       this.subsHead = void 0;
     }
@@ -2144,11 +2149,11 @@ function watch$1(source, cb, options = EMPTY_OBJ) {
             oldValue === INITIAL_WATCHER_VALUE ? void 0 : isMultiSource && oldValue[0] === INITIAL_WATCHER_VALUE ? [] : oldValue,
             boundCleanup
           ];
+          oldValue = newValue;
           call ? call(cb, 3, args) : (
             // @ts-expect-error
             cb(...args)
           );
-          oldValue = newValue;
         } finally {
           activeWatcher = currentWatcher;
         }
@@ -3073,15 +3078,16 @@ const TeleportImpl = {
         updateCssVars(n2, true);
       }
       if (isTeleportDeferred(n2.props)) {
+        n2.el.__isMounted = false;
         queuePostRenderEffect(() => {
           mountToTarget();
-          n2.el.__isMounted = true;
+          delete n2.el.__isMounted;
         }, parentSuspense);
       } else {
         mountToTarget();
       }
     } else {
-      if (isTeleportDeferred(n2.props) && !n1.el.__isMounted) {
+      if (isTeleportDeferred(n2.props) && n1.el.__isMounted === false) {
         queuePostRenderEffect(() => {
           TeleportImpl.process(
             n1,
@@ -3095,7 +3101,6 @@ const TeleportImpl = {
             optimized,
             internals
           );
-          delete n1.el.__isMounted;
         }, parentSuspense);
         return;
       }
@@ -4083,6 +4088,8 @@ function createHydrationFunctions(rendererInternals) {
         ) && parentComponent && parentComponent.vnode.props && parentComponent.vnode.props.appear;
         const content = el.content.firstChild;
         if (needCallTransitionHooks) {
+          const cls = content.getAttribute("class");
+          if (cls) content.$cls = cls;
           transition.beforeEnter(content);
         }
         replaceNode(content, el, parentComponent);
@@ -4335,7 +4342,12 @@ function propHasMismatch(el, key, clientValue, vnode, instance) {
   let actual;
   let expected;
   if (key === "class") {
-    actual = el.getAttribute("class");
+    if (el.$cls) {
+      actual = el.$cls;
+      delete el.$cls;
+    } else {
+      actual = el.getAttribute("class");
+    }
     expected = normalizeClass(clientValue);
     if (!isSetEqual(toClassSet(actual || ""), toClassSet(expected))) {
       mismatchType = 2 /* CLASS */;
@@ -4473,7 +4485,7 @@ function isMismatchAllowed(el, allowedType) {
     if (allowedType === 0 /* TEXT */ && list.includes("children")) {
       return true;
     }
-    return allowedAttr.split(",").includes(MismatchTypeString[allowedType]);
+    return list.includes(MismatchTypeString[allowedType]);
   }
 }
 
@@ -4630,14 +4642,25 @@ function defineAsyncComponent(source) {
     name: "AsyncComponentWrapper",
     __asyncLoader: load,
     __asyncHydrate(el, instance, hydrate) {
+      let patched = false;
       const doHydrate = hydrateStrategy ? () => {
+        const performHydrate = () => {
+          if (patched) {
+            warn$1(
+              `Skipping lazy hydration for component '${getComponentName(resolvedComp)}': it was updated before lazy hydration performed.`
+            );
+            return;
+          }
+          hydrate();
+        };
         const teardown = hydrateStrategy(
-          hydrate,
+          performHydrate,
           (cb) => forEachElement(el, cb)
         );
         if (teardown) {
           (instance.bum || (instance.bum = [])).push(teardown);
         }
+        (instance.u || (instance.u = [])).push(() => patched = true);
       } : hydrate;
       if (resolvedComp) {
         doHydrate();
@@ -6183,9 +6206,15 @@ If you want to remount the same app, move your app creation logic into a factory
       },
       provide(key, value) {
         if (key in context.provides) {
-          warn$1(
-            `App already provides property with key "${String(key)}". It will be overwritten with the new value.`
-          );
+          if (hasOwn(context.provides, key)) {
+            warn$1(
+              `App already provides property with key "${String(key)}". It will be overwritten with the new value.`
+            );
+          } else {
+            warn$1(
+              `App already provides property with key "${String(key)}" inherited from its parent element. It will be overwritten with the new value.`
+            );
+          }
         }
         context.provides[key] = value;
         return app;
@@ -6222,7 +6251,7 @@ function provide(key, value) {
 function inject(key, defaultValue, treatDefaultAsFactory = false) {
   const instance = currentInstance || currentRenderingInstance;
   if (instance || currentApp) {
-    const provides = currentApp ? currentApp._context.provides : instance ? instance.parent == null ? instance.vnode.appContext && instance.vnode.appContext.provides : instance.parent.provides : void 0;
+    let provides = currentApp ? currentApp._context.provides : instance ? instance.parent == null || instance.ce ? instance.vnode.appContext && instance.vnode.appContext.provides : instance.parent.provides : void 0;
     if (provides && key in provides) {
       return provides[key];
     } else if (arguments.length > 1) {
@@ -6703,6 +6732,8 @@ const assignSlots = (slots, children, optimized) => {
 const initSlots = (instance, children, optimized) => {
   const slots = instance.slots = createInternalObject();
   if (instance.vnode.shapeFlag & 32) {
+    const cacheIndexes = children.__;
+    if (cacheIndexes) def(slots, "__", cacheIndexes, true);
     const type = children._;
     if (type) {
       assignSlots(slots, children, optimized);
@@ -6914,6 +6945,8 @@ function baseCreateRenderer(options, createHydrationFns) {
     }
     if (ref != null && parentComponent) {
       setRef(ref, n1 && n1.ref, parentSuspense, n2 || n1, !n2);
+    } else if (ref == null && n1 && n1.ref != null) {
+      setRef(n1.ref, null, parentSuspense, n1, true);
     }
   };
   const processText = (n1, n2, container, anchor) => {
@@ -7219,7 +7252,7 @@ function baseCreateRenderer(options, createHydrationFns) {
         (oldVNode.type === Fragment || // - In the case of different nodes, there is going to be a replacement
         // which also requires the correct parent container
         !isSameVNodeType(oldVNode, newVNode) || // - In the case of a component, it could contain anything.
-        oldVNode.shapeFlag & (6 | 64)) ? hostParentNode(oldVNode.el) : (
+        oldVNode.shapeFlag & (6 | 64 | 128)) ? hostParentNode(oldVNode.el) : (
           // In other cases, the parent container is not actually used so we
           // just pass the block element here to avoid a DOM parentNode call.
           fallbackContainer
@@ -7473,7 +7506,8 @@ function baseCreateRenderer(options, createHydrationFns) {
             hydrateSubTree();
           }
         } else {
-          if (root.ce) {
+          if (root.ce && // @ts-expect-error _def is private
+          root.ce._def.shadowRoot !== false) {
             root.ce._injectChildStyle(type);
           }
           {
@@ -10571,7 +10605,7 @@ function isMemoSame(cached, memo) {
   return true;
 }
 
-const version = "3.5.14";
+const version = "3.5.17";
 const warn = warn$1 ;
 const ErrorTypeStrings = ErrorTypeStrings$1 ;
 const devtools = devtools$1 ;
@@ -11472,13 +11506,10 @@ class VueElement extends BaseClass {
         this._root = this;
       }
     }
-    if (!this._def.__asyncLoader) {
-      this._resolveProps(this._def);
-    }
   }
   connectedCallback() {
     if (!this.isConnected) return;
-    if (!this.shadowRoot) {
+    if (!this.shadowRoot && !this._resolved) {
       this._parseSlots();
     }
     this._connected = true;
@@ -11491,8 +11522,7 @@ class VueElement extends BaseClass {
     }
     if (!this._instance) {
       if (this._resolved) {
-        this._setParent();
-        this._update();
+        this._mount(this._def);
       } else {
         if (parent && parent._pendingResolve) {
           this._pendingResolve = parent._pendingResolve.then(() => {
@@ -11508,7 +11538,15 @@ class VueElement extends BaseClass {
   _setParent(parent = this._parent) {
     if (parent) {
       this._instance.parent = parent._instance;
-      this._instance.provides = parent._instance.provides;
+      this._inheritParentContext(parent);
+    }
+  }
+  _inheritParentContext(parent = this._parent) {
+    if (parent && this._app) {
+      Object.setPrototypeOf(
+        this._app._context.provides,
+        parent._instance.provides
+      );
     }
   }
   disconnectedCallback() {
@@ -11558,9 +11596,7 @@ class VueElement extends BaseClass {
         }
       }
       this._numberProps = numberProps;
-      if (isAsync) {
-        this._resolveProps(def);
-      }
+      this._resolveProps(def);
       if (this.shadowRoot) {
         this._applyStyles(styles);
       } else if (styles) {
@@ -11572,9 +11608,10 @@ class VueElement extends BaseClass {
     };
     const asyncDef = this._def.__asyncLoader;
     if (asyncDef) {
-      this._pendingResolve = asyncDef().then(
-        (def) => resolve(this._def = def, true)
-      );
+      this._pendingResolve = asyncDef().then((def) => {
+        def.configureApp = this._def.configureApp;
+        resolve(this._def = def, true);
+      });
     } else {
       resolve(this._def);
     }
@@ -11584,6 +11621,7 @@ class VueElement extends BaseClass {
       def.name = "VueElement";
     }
     this._app = this._createApp(def);
+    this._inheritParentContext();
     if (def.configureApp) {
       def.configureApp(this._app);
     }
@@ -11668,7 +11706,9 @@ class VueElement extends BaseClass {
     }
   }
   _update() {
-    render(this._createVNode(), this._root);
+    const vnode = this._createVNode();
+    if (this._app) vnode.appContext = this._app._context;
+    render(vnode, this._root);
   }
   _createVNode() {
     const baseProps = {};
@@ -13517,7 +13557,7 @@ class Tokenizer {
     this.buffer = input;
     while (this.index < this.buffer.length) {
       const c = this.buffer.charCodeAt(this.index);
-      if (c === 10) {
+      if (c === 10 && this.state !== 33) {
         this.newlines.push(this.index);
       }
       switch (this.state) {
@@ -14522,7 +14562,7 @@ function isUpperCase(c) {
   return c > 64 && c < 91;
 }
 const windowsNewlineRE = /\r\n/g;
-function condenseWhitespace(nodes, tag) {
+function condenseWhitespace(nodes) {
   const shouldCondense = currentOptions.whitespace !== "preserve";
   let removedWhitespace = false;
   for (let i = 0; i < nodes.length; i++) {
@@ -14686,12 +14726,12 @@ function cacheStatic(root, context) {
     context,
     // Root node is unfortunately non-hoistable due to potential parent
     // fallthrough attributes.
-    isSingleElementRoot(root, root.children[0])
+    !!getSingleElementRoot(root)
   );
 }
-function isSingleElementRoot(root, child) {
-  const { children } = root;
-  return children.length === 1 && child.type === 1 && !isSlotOutlet(child);
+function getSingleElementRoot(root) {
+  const children = root.children.filter((x) => x.type !== 3);
+  return children.length === 1 && children[0].type === 1 && !isSlotOutlet(children[0]) ? children[0] : null;
 }
 function walk(node, parent, context, doNotHoistNode = false, inFor = false) {
   const { children } = node;
@@ -15151,15 +15191,15 @@ function createRootCodegen(root, context) {
   const { helper } = context;
   const { children } = root;
   if (children.length === 1) {
-    const child = children[0];
-    if (isSingleElementRoot(root, child) && child.codegenNode) {
-      const codegenNode = child.codegenNode;
+    const singleElementRootChild = getSingleElementRoot(root);
+    if (singleElementRootChild && singleElementRootChild.codegenNode) {
+      const codegenNode = singleElementRootChild.codegenNode;
       if (codegenNode.type === 13) {
         convertToBlock(codegenNode, context);
       }
       root.codegenNode = codegenNode;
     } else {
-      root.codegenNode = child;
+      root.codegenNode = children[0];
     }
   } else if (children.length > 1) {
     let patchFlag = 64;
@@ -16506,7 +16546,7 @@ function buildSlots(node, context, buildSlotFn = buildClientSlotFn) {
       let prev;
       while (j--) {
         prev = children[j];
-        if (prev.type !== 3) {
+        if (prev.type !== 3 && isNonWhitespaceContent(prev)) {
           break;
         }
       }
@@ -18007,6 +18047,9 @@ const ignoreSideEffectTags = (node, context) => {
 };
 
 function isValidHTMLNesting(parent, child) {
+  if (parent === "template") {
+    return true;
+  }
   if (parent in onlyValidChildren) {
     return onlyValidChildren[parent].has(child);
   }
