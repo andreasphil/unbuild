@@ -17,12 +17,10 @@ Optimized for prototyping and small side projects where simplicity and ease of d
 
 ## Usage
 
-The easiest way to start a new project is to fetch the template folder using [`degit`](https://github.com/Rich-Harris/degit):
+The easiest way to start a new project is to fetch the template folder using [`giget`](https://github.com/unjs/giget):
 
 ```sh
-mkdir app-name
-cd app-name
-npx degit https://github.com/andreasphil/unbuild
+npx giget@latest gh:andreasphil/unbuild <project name>
 ```
 
 You'll need a HTTP server for serving the project during development, since features such as JavaScript modules are not supported by the file protocol. Any server will do, though you might want one that routes any non-file request to `index.html` if you use a router such as [`vue-router`](https://router.vuejs.org). I like [`servor`](https://github.com/lukejacksonn/servor):
