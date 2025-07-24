@@ -1,9 +1,12 @@
 {
   "compilerOptions": {
     "checkJs": true,
-    "target": "es2024",
+    "target": "esnext",
     "moduleResolution": "bundler",
     "module": "esnext",
-    "paths": { "@/*": ["./scripts/*"], "@vendor/*": ["./vendor/*"] }
+    "paths": {
+      "@/*": ["./scripts/*"],
+      "@vendor/*": ["./vendor/*"]
+    }
   }
 }
