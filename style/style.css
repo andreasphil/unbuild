@@ -1,2 +1,1 @@
-@import url("../vendor/andreasphil/design-system@v0.52.0/dist/design-system.min.css")
-layer(theme);
+@import url("../vendor/design-system.css") layer(theme);
