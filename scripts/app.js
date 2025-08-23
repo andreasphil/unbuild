@@ -1,19 +1,9 @@
 import { html } from "@/lib.js";
-import { useThemeColor } from "@vendor/andreasphil/design-system@v0.52.0/scripts/utils.js";
-import {
-  createApp,
-  defineComponent,
-  onMounted,
-  ref,
-} from "@vendor/vue@3.5.17/dist/vue.esm-browser.prod.js";
+import { createApp, defineComponent, ref } from "@vendor/vue.esm-browser.prod.js";
 
 const App = defineComponent({
   setup() {
     const name = ref("world");
-
-    onMounted(() => {
-      useThemeColor();
-    });
 
     return { name };
   },
