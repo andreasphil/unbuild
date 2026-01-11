@@ -1,6 +1,6 @@
 @layer theme, app, utils;
-@import url("../vendor/design-system.css") layer(theme);
-@import url("../vendor/design-system-utils.css") layer(utils);
+@import url("../common/design-system.css") layer(theme);
+@import url("../common/design-system-utils.css") layer(utils);
 
 @layer app {
   /* Application styles */

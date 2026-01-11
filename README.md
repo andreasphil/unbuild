@@ -37,7 +37,7 @@ npx servor --browse --reload
 | `assets/`                    | This is where you should keep your static assets such as favicons, images, and the like.                                                                                                                |
 | `scripts/`                   | For application scripts. `app.js` is imported by `index.html` and should serve as the entrypoint for the application.                                                                                   |
 | `styles/`                    | For stylesheets. `styles.css` is imported by `index.html` and should serve as the entrypoint for the application.                                                                                       |
-| `vendor/`                    | If you want to keep dependencies locally rather than serving them from a CDN, put them here.                                                                                                            |
+| `common/`                    | If you want to keep dependencies locally rather than serving them from a CDN, put them here.                                                                                                            |
 | `index.html`                 | Entrypoint to the SPA. Use the [import map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules#importing_modules_using_import_maps) for declaring external dependencies and aliases. |
 | `jsconfig.json`              | Enables some minimal editor support such as aliases and automatic type checking.                                                                                                                        |
 | `LICENSE.md` and `README.md` | Replace these with your stuff.                                                                                                                                                                          |
@@ -57,9 +57,9 @@ Luckily there are a few tricks we can use to improve this experience:
 
 - **Editor:** I recommend [Visual Studio Code](https://code.visualstudio.com), because it has features such as linting and formatting included out of the box. If you use the `html` helper from [lib.js](./scripts/lib.js), VS Code provides highlighting for templates. I also prefer the [prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extension to the default formatter.
 
-- **Dependencies:** The most convenient way to use external dependencies is to link them in the import map in `index.html` from a CDN such as [esm.sh](https://esm.sh). This gives you access to virtually any npm module as well as code hosted on GitHub. Alternatively, just drop them in `/vendor/` if they're simple and don't change often.
+- **Dependencies:** The most convenient way to use external dependencies is to link them in the import map in `index.html` from a CDN such as [esm.sh](https://esm.sh). This gives you access to virtually any npm module as well as code hosted on GitHub. Alternatively, just drop them in `/common/` if they're simple and don't change often.
 
-- **Aliases:** You can simplify local imports by mapping certain paths to aliases in the import map. Unbuild comes pre-configured with `./scripts/` aliased to `@/` and `./vendor/` aliased to `@vendor/`.
+- **Aliases:** You can simplify local imports by mapping certain paths to aliases in the import map. Unbuild comes pre-configured with `./scripts/` aliased to `@/` and `./common/` aliased to `@common/`.
 
 - **Autocompletions:** VS Code and Node.js-based language tools don't support autocompletions based on import maps and URL imports. If you vendor your dependencies, your editor should be able to make sense of them and provide completions.
 

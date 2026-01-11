@@ -17,7 +17,7 @@
 
     "paths": {
       "@/*": ["./scripts/*"],
-      "@vendor/*": ["./vendor/*"]
+      "@common/*": ["./common/*"]
     }
   }
 }
