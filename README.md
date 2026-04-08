@@ -11,7 +11,7 @@ Unbuild lets you enjoy many of the conveniences of modern SPA development with (
 Optimized for prototyping and small side projects where simplicity and ease of development are important to keep them fun, and the problems solved by complex toolchains—automated testing, enforcing code style, highly optimized production code, etc.—aren't as big of a concern.
 
 - ✌️ [Vue](https://vuejs.org) support with templates and composition API
-- 🚀 Works with any static file server, no `npm` or build process required
+- 🚀 Works with any static file server, no package manager or build process required
 - 📦 Import external ESM and CSS dependencies from CDNs via [Import Maps](https://github.com/WICG/import-maps)
 - 🌍 Use The Platform™ - relies on established or polyfillable standards
 
@@ -20,14 +20,14 @@ Optimized for prototyping and small side projects where simplicity and ease of d
 The easiest way to start a new project is to fetch the template folder using [`giget`](https://github.com/unjs/giget):
 
 ```sh
-npx giget@latest gh:andreasphil/unbuild <project name>
+pnpx giget@latest gh:andreasphil/unbuild <project name>
 ```
 
 You'll need a HTTP server for serving the project during development, since features such as JavaScript modules are not supported by the file protocol. Any server will do, though you might want one that routes any non-file request to `index.html` if you use a router such as [`vue-router`](https://router.vuejs.org). I like [`servor`](https://github.com/lukejacksonn/servor):
 
 ```sh
 # --browse launches a browser, --reload reloads when files change
-npx servor --browse --reload
+pnpx servor --browse --reload
 ```
 
 ### Files & folders
@@ -39,7 +39,7 @@ npx servor --browse --reload
 | `styles/`                    | For stylesheets. `styles.css` is imported by `index.html` and should serve as the entrypoint for the application.                                                                                       |
 | `common/`                    | If you want to keep dependencies locally rather than serving them from a CDN, put them here.                                                                                                            |
 | `index.html`                 | Entrypoint to the SPA. Use the [import map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules#importing_modules_using_import_maps) for declaring external dependencies and aliases. |
-| `jsconfig.json`              | Enables some minimal editor support such as aliases and automatic type checking.                                                                                                                        |
+| `tsconfig.json`              | Enables some minimal editor support such as aliases and automatic type checking.                                                                                                                        |
 | `LICENSE.md` and `README.md` | Replace these with your stuff.                                                                                                                                                                          |
 
 ## Development
@@ -57,7 +57,7 @@ Luckily there are a few tricks we can use to improve this experience:
 
 - **Editor:** I recommend [Visual Studio Code](https://code.visualstudio.com), because it has features such as linting and formatting included out of the box. If you use the `html` helper from [lib.js](./scripts/lib.js), VS Code provides highlighting for templates. I also prefer the [prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extension to the default formatter.
 
-- **Dependencies:** The most convenient way to use external dependencies is to link them in the import map in `index.html` from a CDN such as [esm.sh](https://esm.sh). This gives you access to virtually any npm module as well as code hosted on GitHub. Alternatively, just drop them in `/common/` if they're simple and don't change often.
+- **Dependencies:** The most convenient way to use external dependencies is to link them in the import map in `index.html` from a CDN such as [esm.sh](https://esm.sh). This gives you access to virtually any Node module as well as code hosted on GitHub. Alternatively, just drop them in `/common/` if they're simple and don't change often.
 
 - **Aliases:** You can simplify local imports by mapping certain paths to aliases in the import map. Unbuild comes pre-configured with `./scripts/` aliased to `@/` and `./common/` aliased to `@common/`.
 
