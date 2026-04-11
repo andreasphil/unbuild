@@ -1,7 +1,7 @@
-@layer theme, app, utils;
-@import url("../common/design-system.css") layer(theme);
+@layer base, components, utils;
+@import url("../common/design-system.css") layer(base);
 @import url("../common/design-system-utils.css") layer(utils);
 
-@layer app {
+@layer components {
   /* Application styles */
 }
