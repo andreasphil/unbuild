@@ -4,11 +4,8 @@ import { html } from "./lib.js";
 const App = defineComponent({
   setup() {
     const name = ref("world");
-
-    return { name };
+    return () => html`<h1>Hello ${name.value}!</h1>`;
   },
-
-  template: html`<h1>Hello {{ name }}!</h1>`,
 });
 
 createApp(App).mount("#app");
