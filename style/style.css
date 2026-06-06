@@ -1,6 +1,7 @@
 @layer base, components, utils;
-@import url("../common/design-system.css") layer(base);
-@import url("../common/design-system-utils.css") layer(utils);
+
+@import "../common/design-system.css" layer(base);
+@import "../common/design-system-utils.css" layer(utils);
 
 @layer components {
   /* Application styles */
