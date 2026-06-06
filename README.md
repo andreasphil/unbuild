@@ -34,7 +34,7 @@ pnpx servor --browse --reload
 
 | Name                         | Notes                                                                                                                                                                                                   |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `assets/`                    | This is where you should keep your static assets such as favicons, images, and the like.                                                                                                                |
+| `public/`                    | This is where you should keep your static assets such as favicons, images, and the like.                                                                                                                |
 | `scripts/`                   | For application scripts. `app.js` is imported by `index.html` and should serve as the entrypoint for the application.                                                                                   |
 | `styles/`                    | For stylesheets. `styles.css` is imported by `index.html` and should serve as the entrypoint for the application.                                                                                       |
 | `common/`                    | If you want to keep dependencies locally rather than serving them from a CDN, put them here.                                                                                                            |
