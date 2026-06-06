@@ -10,11 +10,6 @@
     "noEmit": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "paths": {
-      "@/*": ["./scripts/*"],
-      "@common/*": ["./common/*"],
-      "vue": ["./common/vue.esm-browser.prod.js"]
-    },
     "skipLibCheck": true,
     "strict": true,
     "target": "esnext"

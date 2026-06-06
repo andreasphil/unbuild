@@ -1,5 +1,5 @@
-import { createApp, defineComponent, ref } from "@common/vue.esm-browser.prod.js";
-import { html } from "@/lib.js";
+import { createApp, defineComponent, ref } from "../common/vue.esm-browser.prod.js";
+import { html } from "./lib.js";
 
 const App = defineComponent({
   setup() {
