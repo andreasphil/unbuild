@@ -1,0 +1,9 @@
+{
+  "name": "Vue App",
+  "display": "standalone",
+  "icons": [
+    { "src": "./public/icon-192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "./public/icon-512.png", "type": "image/png", "sizes": "512x512" },
+    { "src": "./public/icon-mask.png", "type": "image/png", "sizes": "512x512", "purpose": "maskable" }
+  ]
+}

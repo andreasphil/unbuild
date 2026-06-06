@@ -39,6 +39,7 @@ pnpx servor --browse --reload
 | `styles/`                    | For stylesheets. `styles.css` is imported by `index.html` and should serve as the entrypoint for the application.                                                                                       |
 | `common/`                    | If you want to keep dependencies locally rather than serving them from a CDN, put them here.                                                                                                            |
 | `index.html`                 | Entrypoint to the SPA. Use the [import map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules#importing_modules_using_import_maps) for declaring external dependencies and aliases. |
+| `manifest.json`              | PWA manifest                                                                                                                                                                                            |
 | `tsconfig.json`              | Enables some minimal editor support such as aliases and automatic type checking.                                                                                                                        |
 | `LICENSE.md` and `README.md` | Replace these with your stuff.                                                                                                                                                                          |
 
