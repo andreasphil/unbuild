@@ -60,7 +60,7 @@ Luckily there are a few tricks we can use to improve this experience:
 
 - **Dependencies:** The most convenient way to use external dependencies is to link them in the import map in `index.html` from a CDN such as [esm.sh](https://esm.sh). This gives you access to virtually any Node module as well as code hosted on GitHub. Alternatively, just drop them in `common/` if they're simple and don't change often.
 
-- **Aliases:** You can simplify local imports by mapping certain paths to aliases in the import map. Unbuild comes pre-configured with `scripts/` aliased to `@/` and `common/` aliased to `@common/`.
+- **Aliases:** You can simplify local imports by mapping certain paths to aliases in the import map. Remember to also add the `paths` compiler option in `tsconfig.json` to get autocompletions in your editor.
 
 - **Autocompletions:** Node.js-based language tools don't support autocompletions based on import maps and URL imports. If you vendor your dependencies, your editor should be able to make sense of them and provide completions.
 
@@ -69,6 +69,49 @@ Luckily there are a few tricks we can use to improve this experience:
 - **Deployment:** No `node_modules` or build process means you can literally just drop your project folder on any static file server that has an IP, and your app is ready.
 
 - **Testing:** If you want to add unit tests, you can use [Node.js'](https://nodejs.org/api/test.html) built-in test runners for lightweight testing that doesn't require any additional setup or dependencies (beyond Node.js).
+
+### Scaling up
+
+As your project grows in complexity, you may find that skipping building and bundling entirely becomes more and more cumbersome. Fortunately, Unbuild's project layout is Vite- and TypeScript-friendly, allowing you to easily add both when needed. To get started:
+
+```bash
+# Add a basic package.json
+pnpm init --bare
+
+# Install dev dependencies
+pnpm add -D vite typescript
+
+# Install project dependencies; for the otherwise vendored defaults use:
+pnpm add vue htm github:andreasphil/design-system
+```
+
+Replace all imports from `common/` with the package name. Remove the `public` prefix from all references to assets in `public/` (these will be served from `/` by Vite). Now you should be good to go:
+
+```bash
+# Run the Vite dev server
+pnpm vite
+```
+
+Optionally, add the following minimal Vite config. This should remove all automatic code modifications (like transpiling), and suppress some warnings that Vue prints to the console when used without the Vue plugin:
+
+```ts
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  build: {
+    target: "esnext",
+  },
+  resolve: {
+    alias: {
+      vue: "vue/dist/vue.runtime.esm-browser.prod.js",
+    },
+  },
+});
+```
+
+This way, you get a setup that stays fairly close to web standards, supported by a lightweight build process that improves TypeScript assistance, dependency management, and output performance.
+
+See [Tasks](https://github.com/andreasphil/tasks) for an example of a project that follows this approach.
 
 ## Deployment
 
